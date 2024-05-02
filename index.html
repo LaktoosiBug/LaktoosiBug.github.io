@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RhythmPrinter</title>
+    <link href="rytmi.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div id="div1">
+    <p>To start recording press spacebar, and then click your rhythm on it, and the program will write the notes for you!</p>
+	<p>To stop recording, press Enter.</p>
+    <p id="timer">0 seconds</p>
+	<p id="unpressedTime">0 seconds unpressed</p> <!-- Display unpressed time -->
+</div>
+
+<!-- Add a textbox for displaying recording status -->
+<div id="recordingText">Recording...</div>
+
+<div id="sheet">
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM content loaded');
+	
+	let sheet = document.getElementById("sheet");
+	let spaceBarPressed = false;
+    let recording = false; 
+    let startTime;
+    let timerInterval;
+    let unpressedStartTime;
+    let duration; 
+    let numRows = 5;
+
+    let xOffset = 110; // Horizontal position
+    let yOffset = 213; // Top position of the lowest line
+    const spacing = 10; // Space between notes
+
+	addNewRow('treble');
+
+function addNewRow(clefType) {
+    let linex = 200; // og horizontal position for the lines
+    const lineHeight = 10; // Height between lines
+    const rowHeight = 100; // Height of each row
+    const rowGap = -20; // Vertical gap between rows
+    const clefOffset = 60; // Offset for the clef symbol from the left edge
+
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) { // Add 5 lines with 10px spacing
+            const line = document.createElement("div");
+            line.className = "line";
+            line.style.top = linex + "px"; // Adjust position for the new line
+            sheet.appendChild(line);
+            linex += lineHeight; // Increment linex for the next line
+        }
+        linex += rowHeight + rowGap; // Move to the next row
+
+        // Add clef symbol for each row
+        const clefSymbol = document.createElement("span");
+        clefSymbol.className = "clef";
+        clefSymbol.textContent = clefType === 'treble' ? '\u{1D11E}' : '\u{1D122}'; // Unicode characters for clef symbols
+        clefSymbol.style.top = (linex - (rowHeight + lineHeight)) + "px"; // Position at the top of the row
+        clefSymbol.style.transform = 'translateY(-55%)'; // to center the symbol
+        clefSymbol.style.left = clefOffset + 'px'; // horizontal position
+        sheet.appendChild(clefSymbol);
+    }
+    numRows++;
+}
+
+
+
+
+  document.addEventListener('keydown', function (event) {
+    console.log('Keydown event:', event);
+    if (event.code === 'Space' && !spaceBarPressed) {
+        console.log('Space bar pressed');
+        spaceBarPressed = true;
+        recording = true; // Start recording
+        document.getElementById('recordingText').style.display = 'block'; // Show recording text
+        startTime = new Date().getTime();
+        if (unpressedStartTime) {
+            const currentTime = new Date().getTime();
+            const unpressedDuration = (currentTime - unpressedStartTime) / 1000;
+            document.getElementById('unpressedTime').textContent = unpressedDuration.toFixed(2) + ' seconds unpressed';
+            addAForUnpressedDuration();
+        }
+        timerInterval = setInterval(updateTimer, 10); // Calls the updateTimer function every 10 milliseconds
+    } else if (event.code === 'Enter' && recording) {
+        spaceBarPressed = false;
+        recording = false; // Stop recording
+        document.getElementById('recordingText').style.display = 'none'; // Hide recording text
+        clearInterval(timerInterval);
+        updateTimer();
+    }
+});
+
+// Function to add 'A' notes based on unpressed duration
+function addAForUnpressedDuration() {
+	console.log('adding A for unpressed duration');
+    const currentTime = new Date().getTime();
+    const unpressedDuration = (currentTime - unpressedStartTime) / 1000;
+    if (unpressedDuration >= 0.16 && unpressedDuration <= 0.32) {
+        addNoteToTopLine('&#119102;');    // kahdeksasosanuotti
+    } else if (unpressedDuration >= 0.32 && unpressedDuration <= 0.42) {
+        addNoteToTopLine('&#119103; &#119102;'); //pidennetty kahdeksasosanuotti
+    } else if (unpressedDuration >= 0.42 && unpressedDuration <= 0.60) {
+        addNoteToTopLine('&#119101;');     //neljäsosanuotti
+    } else if (unpressedDuration >= 0.60 && unpressedDuration <= 0.84) {
+        addNoteToTopLine('&#119101; &#119102;');    //pidennetty neljäsosa
+    } else if (unpressedDuration >= 0.84 && unpressedDuration <= 1.25) {
+        addNoteToTopLine('&#119100;');    //puolinuotti
+    } else if (unpressedDuration >= 1.25 && unpressedDuration <= 1.65) {
+        addNoteToTopLine('&#119100; &#119101;');  //pidennetty puolinuotti
+    } else if (unpressedDuration >= 1.65 && unpressedDuration <= 2.60) {
+        addNoteToTopLine('&#119099;');   //kokonuotti
+    } else if (unpressedDuration >= 2.60 && unpressedDuration <= 4.30) {
+        addNoteToTopLine('&#119099; &#119100;');     //pidennetty kokonuotti
+	}
+}
+
+function noteDefinition(duration) { // Pass duration as a parameter
+    if (duration >= 0.08 && duration <= 0.16) {
+        addNoteToTopLine('&#119137;');    //kuudestoistaosa nuotti
+    } else if (duration >= 0.16 && duration <= 0.21) {
+        addNoteToTopLine('&#119137; &#119149;');   //pidennetty kuudestoistaosa
+    } else if (duration >= 0.21 && duration <= 0.32) {
+        addNoteToTopLine('&#119136;');    // kahdeksasosanuotti
+    } else if (duration >= 0.32 && duration <= 0.42) {
+        addNoteToTopLine('&#119136; &#119149;'); //pidennetty kahdeksasosanuotti
+    } else if (duration >= 0.42 && duration <= 0.60) {
+        addNoteToTopLine('&#119135;');     //neljäsosanuotti
+    } else if (duration >= 0.60 && duration <= 0.84) {
+        addNoteToTopLine('&#119135; &#119149;');    //pidennetty neljäsosa
+    } else if (duration >= 0.84 && duration <= 1.25) {
+        addNoteToTopLine('&#119134;');    //puolinuotti
+    } else if (duration >= 1.25 && duration <= 1.65) {
+        addNoteToTopLine('&#119134; &#119149;');  //pidennetty puolinuotti
+    } else if (duration >= 1.65 && duration <= 2.60) {
+        addNoteToTopLine('&#119133;');   //kokonuotti
+    } else if (duration >= 2.60 && duration <= 4.30) {
+        addNoteToTopLine('&#119133; &#119149;');     //pidennetty kokonuotti
+    }
+}
+
+// Update the keyup event listener
+document.addEventListener('keyup', function (event) {
+    console.log('keyup event', event);
+    if (event.code === 'Space' && spaceBarPressed) {
+        console.log('Space key released');
+        spaceBarPressed = false;
+        clearInterval(timerInterval);
+        updateTimer(); // Update timer display
+        addAForUnpressedDuration(); // Add 'A's based on unpressed duration
+    }
+});
+
+   function updateTimer() {
+    const timerElement = document.getElementById('timer');
+    const unpressedTimeElement = document.getElementById('unpressedTime');
+    const currentTime = new Date().getTime();
+    duration = (currentTime - startTime) / 1000; // Assign value to duration
+    timerElement.textContent = duration.toFixed(2) + ' seconds';
+
+    // Calculate unpressed duration if space is not pressed
+    if (!spaceBarPressed) {
+        console.log('currenttime:', currentTime);
+        console.log('UnpressedStartTime:', unpressedStartTime);
+        if (!unpressedStartTime) {
+            unpressedStartTime = currentTime;
+            console.log('unpressed start time set:', unpressedStartTime);
+        }
+        const unpressedDuration = (currentTime - unpressedStartTime) / 1000;
+        console.log('spaceBarPressed:', spaceBarPressed);
+        console.log('unpressed duration:', unpressedDuration);
+        unpressedTimeElement.textContent = unpressedDuration.toFixed(2) + ' seconds unpressed';
+    } else {
+        unpressedStartTime = null;
+    }
+
+    // Add notes during recording
+    if (recording) {
+        console.log('recording....');
+        if (!spaceBarPressed) {
+            console.log('space bar not pressed during recording');
+            noteDefinition(duration); // Pass duration to noteDefinition function
+        }
+    }
+}
+
+function addNoteToTopLine(symbol) {
+    const note = document.createElement("div");
+    note.className = "note";
+    note.innerHTML = symbol;
+
+    // Position the note on top of the lowest line
+    note.style.top = yOffset - 10 + "px"; // Adjust the position as needed
+
+    // Position the note horizontally with spacing
+    note.style.left = xOffset + "px";
+
+    // Append to sheet
+    sheet.appendChild(note);
+
+    // Make the note draggable
+    note.draggable = true;
+
+    // Add drag event listeners
+    note.addEventListener('dragstart', dragStart);
+    note.addEventListener('dragover', dragOver);
+    note.addEventListener('drop', drop);
+
+    // Update horizontal position for the next note
+    xOffset += 40 + spacing; // Width of note symbol + spacing
+
+    // Check if xOffset exceeds the maximum width of the sheet
+    if (xOffset + 40 > 1135) {
+        // Move to the beginning of the next row
+        xOffset = 110;
+        yOffset += 130;
+    }
+}
+
+// Drag and drop functions
+function dragStart(event) {
+    event.dataTransfer.setData('text/plain', event.target.id);
+}
+
+function dragOver(event) {
+    event.preventDefault();
+}
+
+function drop(event) {
+    event.preventDefault();
+    const data = event.dataTransfer.getData('text/plain');
+    const draggedElement = document.getElementById(data);
+    const mouseY = event.clientY;
+
+    // Calculate the closest position from the predefined positions array
+    const position = [216, 213, 207, 203, 197, 192, 187, 182, 177, 173, 167];
+    let closestPosition = position.reduce((prev, curr) => {
+        return Math.abs(curr - mouseY) < Math.abs(prev - mouseY) ? curr : prev;
+    });
+
+    // Update the top position of the dragged note
+    draggedElement.style.top = closestPosition + 'px';
+
+    // Calculate the left position based on the drop event
+    const mouseX = event.clientX;
+    const sheetRect = sheet.getBoundingClientRect();
+    const leftPosition = mouseX - sheetRect.left;
+
+    // Update the left position of the dragged note
+    draggedElement.style.left = leftPosition + 'px';
+}
+
+
+});
+</script>
+
+</body>
+</html>
