@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0b4cd;
+    margin: 50px;
+    padding: 0;
+}
+
+h1 {
+    color: #0066cc;
+}
+
+#div1 {
+	
+    text-align: left;
+}
+
+#div2 {
+	font-size: 80px;
+}
+
+#sheet {
+    width: 1200px;
+    height: 800px;
+    background-color: #fff;
+    border: 1px solid #000;
+    position: relative; 
+}
+.line {
+    position: absolute;
+    width: 90%;
+    height: 2px;
+    background-color: #000;
+	left: 50px
+}
+.note {
+    position: absolute;
+    font-size: 40px;
+}    
+	
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#recordingText {
+            display: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: red;
+        }
+
+
+   .clef-line {
+    position: relative;
+}
+
+.clef {
+    font-size: 60px; 
+    position: absolute;
+}
