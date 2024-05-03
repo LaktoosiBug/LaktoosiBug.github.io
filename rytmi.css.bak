@@ -62,3 +62,16 @@ h1 {
     font-size: 60px; 
     position: absolute;
 }
+
+.sheet-name-input-container {
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        transform: translate(-130%, 70%);
+        width: 300px; 
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+        background-color: white;
+        box-sizing: border-box; 
+    }
