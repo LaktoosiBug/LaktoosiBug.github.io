@@ -96,8 +96,6 @@ function addNewRow(clefType) {
  // Function to save sheet name to Firebase
 function saveSheetName() {
 		var sheetName = document.getElementById("sheetNameInput").value;
-		var database = firebase.database();
-		var sheetRef = database.ref('sheetMusic').push();
         sheetRef.set({
 		name: sheetName
 		}).then(function() {
