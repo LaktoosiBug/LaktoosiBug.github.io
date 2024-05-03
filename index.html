@@ -1,3 +1,4 @@
+@ -1,308 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,18 +19,29 @@
 <!-- textbox for showing recording status -->
 <div id="recordingText">Recording...</div>
 
+<div id="sheet">
+</div>
 
 <div class="sheet-name-input-container">
         <input type="text" id="sheetNameInput" placeholder="Enter sheet music name">
         <button onclick="saveSheetName()">Save</button>
     </div>
-	
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"></script>
 
 <script>
+//firebaseen yhdistys
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBI5_ba2C04nDpDjEWnZe_7VOw0nRnlx2Y",
@@ -43,6 +55,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 firebase.initializeApp(firebaseConfig);
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -106,6 +120,7 @@ function saveSheetName() {
         console.error("Error saving sheet name: ", error);
     });
 }
+
 
   document.addEventListener('keydown', function (event) {
     console.log('Keydown event:', event);
