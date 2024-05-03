@@ -29,12 +29,17 @@
 <button id="rythmSave" type="button">Save rhythm</button>
 
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"></script>
+<script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
 
 
 <script>
+
+import { initializeApp } from 'firebase/app';
+import { getDatabase } from 'firebase/database';
+
 const firebaseConfig = {
   apiKey: "AIzaSyBI5_ba2C04nDpDjEWnZe_7VOw0nRnlx2Y",
   authDomain: "rythmdata.firebaseapp.com",
@@ -48,6 +53,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM content loaded');
