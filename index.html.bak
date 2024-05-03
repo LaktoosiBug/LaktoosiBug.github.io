@@ -19,7 +19,11 @@
 <div id="recordingText">Recording...</div>
 
 <div id="sheet">
+	<input type="text" id="sheetNameInput" placeholder="Enter sheet music name">
+	<button onclick="saveSheetName()">Save</button>
 </div>
+
+
 
 <script>
 //firebaseen yhdistys
