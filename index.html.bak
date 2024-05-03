@@ -100,25 +100,20 @@ function addNewRow(clefType) {
     numRows++;
 }
 
-// Function to save sheet name to Firebase
-  function saveSheetName() {
-    // alue entered by the user
-    var sheetName = document.getElementById("sheetNameInput").value;
-
-    // reference to the Firebase Realtime Database
-    var database = firebase.database();
-
-    // Push the sheet name to a specific location in the database
-    var sheetRef = database.ref('sheetMusic').push();
-    sheetRef.set({
-      name: sheetName
-    }).then(function() {
-      console.log("Sheet name saved successfully!");
-      document.getElementById("sheetNameInput").value = "";
-    }).catch(function(error) {
-      console.error("Error saving sheet name: ", error);
+ // Function to save sheet name to Firebase
+function saveSheetName() {
+		var sheetName = document.getElementById("sheetNameInput").value;
+		var database = firebase.database();
+		var sheetRef = database.ref('sheetMusic').push();
+        sheetRef.set({
+		name: sheetName
+		}).then(function() {
+        console.log("Sheet name saved successfully!");
+        document.getElementById("sheetNameInput").value = "";
+        }).catch(function(error) {
+        console.error("Error saving sheet name: ", error);
     });
-  }
+}
 
 
   document.addEventListener('keydown', function (event) {
